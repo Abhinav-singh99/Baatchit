@@ -114,7 +114,7 @@ io.on('connection', (socket) => {
 
 
 app.post('/signup', async function (req, res) {
-
+try{
     const user = new userSchema({
         username: req.body.username,
         password: req.body.password,
@@ -141,6 +141,11 @@ app.post('/signup', async function (req, res) {
             res.redirect("/")
         }
     })
+
+}catch{
+    res.send("error")
+}
+   
 
 
 })
