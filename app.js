@@ -234,7 +234,7 @@ var upload=multer({
 }).single("file");
 const auth = async (req,res,next)=>{
     const token = req.cookies.jwt;
-    const verifyuser= jwt.verify(token,process.env.SECRET_KEY)
+    const verifyuser= jwt.verify(token,"iamabhinavsinghacsestudent")
     const part= await userSchema.findOne({_id:verifyuser._id}) 
     abc=part.username
     console.log(part)
@@ -247,7 +247,7 @@ const  save= async (req,res,next)=>{
     try{
         var imageFile=req.file.filename;
         const token = req.cookies.jwt;
-        const verifyuser= jwt.verify(token,process.env.SECRET_KEY)
+        const verifyuser= jwt.verify(token,"iamabhinavsinghacsestudent")
         
         console.log(verifyuser._id)
         const useremail = await userSchema.findOne({_id:verifyuser._id});
@@ -280,7 +280,7 @@ app.get("/signin",function(req,res){
 // delete profile
 app.post("/delete",auth,async function(req,res){
     const token = req.cookies.jwt;
-    const verifyuser= jwt.verify(token,process.env.SECRET_KEY)
+    const verifyuser= jwt.verify(token,"iamabhinavsinghacsestudent")
     
     console.log(verifyuser._id)
     const useremail = await userSchema.findOne({_id:verifyuser._id});
