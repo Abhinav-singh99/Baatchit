@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <link rel="stylesheet" href="/css/styles.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+    <title>baatchit</title>
+</head>
+<body>
+    <div class="alert alert-danger" role="alert">
+        couldn't sign you up:please try with unique username and email
+      </div>
+        
+    <div class="login-wrap">
+        <div class="login-html">
+            <div class="img_cont" style="margin-bottom: 30px; margin-left: 15%;">
+                <img src="/images/logo.png" class="rounded-circle user_img" style="display:inline">
+             <h3    style="display:inline"   >Baatchit</h3>
+                
+                
+            </div>
+            <input id="tab-1" type="radio" name="tab" class="sign-in" checked><label for="tab-1" class="tab">Sign In</label>
+            <input id="tab-2" type="radio" name="tab" class="for-pwd"><label for="tab-2" class="tab">signup</label>
+            <div class="login-form">
+                <div class="sign-in-htm">
+                    <form action="/signin" id="practice" method="POST">
+                        <div class="group">
+                            <label for="user" class="label"> Email</label>
+                            <input id="user" type="text" class="input" name="email">
+                        </div>
+                        <div class="group">
+                            <label for="user" class="label">username</label>
+                            <input id="user" type="text" class="input" name="username">
+                        </div>
+                        <div class="group">
+                            <label for="pass" class="label">Password</label>
+                            <input id="pass" type="password" class="input" data-type="password " name="password">
+                        </div>
+                        <div class="group">
+                            <input type="submit" class="button" value="Sign In">
+                        </div>
+                        <div class="hr"></div>
+                    </div> 
+
+                    </form>
+                    
+                <div class="for-pwd-htm" >
+                    <form action="/signup" method="POST" >
+                        <div class="group">
+                            <label for="user" class="label"> username</label>
+                            <input id="user" type="text" class="input" name="username">
+                        </div>
+                        <div class="group">
+                            <label for="user" class="label">password</label>
+                            <input id="user" type="password" class="input" name="password">
+                        </div>
+                        <div class="group">
+                            <label for="user" class="label">email</label>
+                            <input id="user" type="text" class="input" name="email">
+                        </div>                   
+                        <div class="group">
+                            <input type="submit" class="button" value="register">
+                        </div>
+                        <div class="hr"></div>
+                    
+                    </form>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+    
+</body>
+</html>
