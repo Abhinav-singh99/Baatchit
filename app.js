@@ -1,12 +1,12 @@
 const express = require("express")
 const bodyParser = require("body-parser")
 const mongoose = require('mongoose')
-const multer= require('multer')
+const multer = require('multer')
 const path = require("path")
 const userSchema = require('./schema/user_schema')
 const bcrypt = require('bcryptjs');
 const jwt = require("jsonwebtoken")
-const cookieParser= require("cookie-parser")
+const cookieParser = require("cookie-parser")
 
 const http = require('http');
 const socketio = require('socket.io');
@@ -15,7 +15,7 @@ const { Socket } = require("dgram")
 const participants = {};
 const app = express();
 const server = http.createServer(app);
-const PORT= process.env.PORT||3000;
+const PORT = process.env.PORT || 3000;
 const io = socketio(server);
 
 let abc;
@@ -24,10 +24,11 @@ app.use(bodyParser.urlencoded({
 }))
 app.use(express.static('public'))
 app.use(cookieParser());
-mongoose.connect('mongodb://localhost:27017/erp', {
+mongoose.connect('mongodb+srv://abhinav:Abhinav@1234@cluster0.sgjap.mongodb.net/erp?retryWrites=true&w=majority', {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useCreateIndex: true,
+    useFindAndModify: false,
 })
 var db = mongoose.connection;
 db.on('error', console.log.bind(console, "connection error"));
@@ -35,15 +36,17 @@ db.once('open', function () {
     console.log('connection successful')
 })
 
+
+
 // socket connection
 var flag;
-var profile={}
+var profile = {}
 io.on('connection', (socket) => {
     var c = (socket.id)
     console.log(c);
 
     participants[socket.id] = abc;
-     profile[abc]=img;
+    profile[abc] = img;
 
 
     console.log(participants);
@@ -52,9 +55,9 @@ io.on('connection', (socket) => {
 
 
     socket.on("new_user_joined", d => {
-        
 
-        io.emit('temp', { participants, userid: c ,profile});
+
+        io.emit('temp', { participants, userid: c, profile });
 
 
 
@@ -100,7 +103,7 @@ io.on('connection', (socket) => {
         }
         delete participants[socket.id];
         var userid = socket.id
-        io.emit('temp', { participants, userid,profile });
+        io.emit('temp', { participants, userid, profile });
 
     })
     socket.on("send", message => {
@@ -114,38 +117,38 @@ io.on('connection', (socket) => {
 
 
 app.post('/signup', async function (req, res) {
-try{
-    const user = new userSchema({
-        username: req.body.username,
-        password: req.body.password,
+    try {
+        const user = new userSchema({
+            username: req.body.username,
+            password: req.body.password,
 
-        email: req.body.email
+            email: req.body.email
 
-    })
+        })
 
-    const token= await user.generateAuthToken();
-    await user.save();
-    res.cookie("jwt",token,{
-        httpOnly:true
-    })
+        const token = await user.generateAuthToken();
+        await user.save();
+        res.cookie("jwt", token, {
+            httpOnly: true
+        })
 
-    //password hash
+        //password hash
 
 
-    var registered = await user.save(function (err, doc) {
-        if (err) {
-            res.sendFile(path.join(__dirname+"/public/signup_error.html"))
-        }
-        else {
-            console.log("inserted succesfully");
-            res.redirect("/")
-        }
-    })
+        var registered = await user.save(function (err, doc) {
+            if (err) {
+                res.sendFile(path.join(__dirname + "/public/signup_error.html"))
+            }
+            else {
+                console.log("inserted succesfully");
+                res.redirect("/")
+            }
+        })
 
-}catch{
-    res.send("error")
-}
-   
+    } catch {
+        res.send("error")
+    }
+
 
 
 })
@@ -171,9 +174,9 @@ app.post("/signin", async (req, res) => {
         const useremail = await userSchema.findOne({ email: email });
 
         const ismatch = await bcrypt.compare(password, useremail.password);
-        const token= await useremail.generateAuthToken();
-        res.cookie("jwt",token,{
-            httpOnly:true
+        const token = await useremail.generateAuthToken();
+        res.cookie("jwt", token, {
+            httpOnly: true
         })
         console.log(token)
 
@@ -183,24 +186,24 @@ app.post("/signin", async (req, res) => {
 
             if (arr[i] === req.body.username) {
                 flag = 0;
-                
+
                 console.log(flag)
             }
             else {
                 flag = 1;
-               
+
                 console.log(flag)
             }
         }
 
-        if (ismatch && flag != 0 &&useremail.username===req.body.username) {
+        if (ismatch && flag != 0 && useremail.username === req.body.username) {
 
             abc = useremail.username;
             arr.push(abc);
-            if(!useremail.imageUrl){
-                img="/images/download.jpg"
-            }else{
-                img=path.join("/uploads/"+useremail.imageUrl)
+            if (!useremail.imageUrl) {
+                img = "/images/download.jpg"
+            } else {
+                img = path.join("/uploads/" + useremail.imageUrl)
             }
 
             res.sendFile(path.join(__dirname + "/home.html"));
@@ -210,7 +213,7 @@ app.post("/signin", async (req, res) => {
 
         }
         else {
-           res.sendFile(path.join(__dirname+"/public/error.html")) 
+            res.sendFile(path.join(__dirname + "/public/error.html"))
         }
 
 
@@ -220,78 +223,78 @@ app.post("/signin", async (req, res) => {
 
 })
 // profile image 
-var storage=multer.diskStorage({
-    destination:"./public/uploads/",
-    filename:(req,file,cb)=>{
+var storage = multer.diskStorage({
+    destination: "./public/uploads/",
+    filename: (req, file, cb) => {
 
-        cb(null,file.fieldname+"_"+Date.now()+path.extname(file.originalname))
+        cb(null, file.fieldname + "_" + Date.now() + path.extname(file.originalname))
     }
 
 })
-var upload=multer({
-    storage:storage
+var upload = multer({
+    storage: storage
 
 }).single("file");
-const auth = async (req,res,next)=>{
+const auth = async (req, res, next) => {
     const token = req.cookies.jwt;
-    const verifyuser= jwt.verify(token,"iamabhinavsinghacsestudent")
-    const part= await userSchema.findOne({_id:verifyuser._id}) 
-    abc=part.username
+    const verifyuser = jwt.verify(token, "iamabhinavsinghacsestudent")
+    const part = await userSchema.findOne({ _id: verifyuser._id })
+    abc = part.username
     console.log(part)
 
-next()
+    next()
 
 
 }
-const  save= async (req,res,next)=>{
-    try{
-        var imageFile=req.file.filename;
+const save = async (req, res, next) => {
+    try {
+        var imageFile = req.file.filename;
         const token = req.cookies.jwt;
-        const verifyuser= jwt.verify(token,"iamabhinavsinghacsestudent")
-        
+        const verifyuser = jwt.verify(token, "iamabhinavsinghacsestudent")
+
         console.log(verifyuser._id)
-        const useremail = await userSchema.findOne({_id:verifyuser._id});
+        const useremail = await userSchema.findOne({ _id: verifyuser._id });
         console.log(useremail)
-        useremail.imageUrl=imageFile;
-        useremail.save(function(err,doc){
-            if(err){
+        useremail.imageUrl = imageFile;
+        useremail.save(function (err, doc) {
+            if (err) {
                 res.send("err");
-            }else{
-                img=path.join("/uploads/"+useremail.imageUrl);
+            } else {
+                img = path.join("/uploads/" + useremail.imageUrl);
                 next();
             }
         })
-        
-    }catch{
+
+    } catch {
         res.send("error")
     }
-    
-    
+
+
 }
 var img;
-app.post("/upload",[upload,save,auth],  function(req,res){
-    
+app.post("/upload", [upload, save, auth], function (req, res) {
+
     res.redirect("/signin")
-   
+
 })
-app.get("/signin",function(req,res){
-    res.sendFile(path.join(__dirname+"/home.html"))
+app.get("/signin", function (req, res) {
+    res.sendFile(path.join(__dirname + "/home.html"))
 })
 // delete profile
-app.post("/delete",auth,async function(req,res){
+app.post("/delete", auth, async function (req, res) {
     const token = req.cookies.jwt;
-    const verifyuser= jwt.verify(token,"iamabhinavsinghacsestudent")
-    
-    console.log(verifyuser._id)
-    const useremail = await userSchema.findOne({_id:verifyuser._id});
+    const verifyuser = jwt.verify(token, "iamabhinavsinghacsestudent")
 
-    useremail.imageUrl="/images/download.jpg"
-    useremail.save(function(err,doc){
-        if(err){
+    console.log(verifyuser._id)
+    const useremail = await userSchema.findOne({ _id: verifyuser._id });
+
+    useremail.imageUrl = "/images/download.jpg"
+    useremail.save(function (err, doc) {
+        if (err) {
             res.send("err");
-        }else{
-            img="/images/download.jpg"
-            
+        } else {
+            img = "/images/download.jpg"
+
         }
     })
     res.redirect("/signin")
