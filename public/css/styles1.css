@@ -238,8 +238,9 @@ margin-bottom: 15px !important;
     font-weight: 500;
     
 }
-.emojionearea-editor{
+.emojionearea .emojionearea-editor{
     min-height: 2.5rem;
+    max-height: 10px;
 }
 .emojionearea-button{
     opacity:1;
@@ -247,7 +248,7 @@ margin-bottom: 15px !important;
     left:0px
 }
 .emojionearea-picker{
-    left:-80px
+    left:-35px
 }
 /* .text{
     overflow-y: auto;
