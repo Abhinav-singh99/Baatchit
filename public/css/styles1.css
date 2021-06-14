@@ -245,5 +245,7 @@ margin-bottom: 15px !important;
 .emojionearea-picker{
     left:-80px
 }
-
+.text{
+    overflow-y: auto;
+}
 

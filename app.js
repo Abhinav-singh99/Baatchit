@@ -200,7 +200,7 @@ app.post("/signin", async (req, res) => {
 
             abc = useremail.username;
             arr.push(abc);
-            if (!useremail.imageUrl) {
+            if (!useremail.imageUrl|| useremail.imageUrl==="/images/download.jpg") {
                 img = "/images/download.jpg"
             } else {
                 img = path.join("/uploads/" + useremail.imageUrl)
